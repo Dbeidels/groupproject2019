@@ -1,0 +1,11 @@
+---
+title: "Github for Collaboration"
+author: "Daniel Beidelschies, Tim Minot, Kai Akimoto"
+output: 
+  html_document:
+    keep_md: yes
+---
+```{r}
+library(fivethirtyeight)
+```
+
