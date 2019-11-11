@@ -7,5 +7,45 @@ output:
 ---
 ```{r}
 library(fivethirtyeight)
+library(tidyverse)
+library(moderndive)
+view(college_recent_grads)
+```
+```{r}
+our_majors <- c("Computers & Mathematics", "Business", "Health")
+```
+```{r}
+Certain_college_grads <-
+   college_recent_grads%>% 
+    filter(major_category == our_majors)
+```
+
+```{r}
+Certain_college_grads%>% 
+  ggplot(aes(x=major_category,y=median))+
+  geom_boxplot()
+```
+```{r}
+Certain_college_grads%>% 
+  ggplot(aes(x=major_category,y=total))+
+  geom_col()
+```
+```{r}
+view(college_all_ages)
+```
+```{r}
+Certain_all_college <-
+   college_all_ages %>% 
+    filter(major_category == our_majors)
+```
+```{r}
+Certain_college_grads%>% 
+  ggplot(aes(x=major_category,y=median))+
+  geom_boxplot()
+```
+```{r}
+Certain_all_college%>% 
+  ggplot(aes(x=major_category,y=total))+
+  geom_col()
 ```
 
