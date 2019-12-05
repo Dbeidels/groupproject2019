@@ -1,0 +1,62 @@
+---
+title: "Group check in 2"
+output: html_document
+---
+
+```{r}
+library(fivethirtyeight)
+library(tidyverse)
+library(broom)
+library(moderndive)
+library(NHANES)
+data(NHANES)
+view(NHANES)
+```
+
+
+The draft should include the following:
+
+## Describe the data and your research question. Where does it come from? How was it collected? What do you hope to learn?
+
++ For our project we will be utilizing the NHANES data set as well as the health_coverage data set. The NHANES data set contains verious health related information that help to shed light on the quality of life that an individual has as well as whether they died from cancer. We ain to use this data to investigate what quality of life factors are most associated with cancer incidence and cancer deaths.
+
+## 2-4 graphs with explanations about what the graphs show. 
+
+```{r}
+NHANES %>% 
+  ggplot(aes(x=Age,y=DaysPhysHlthBad, color=Diabetes))+
+  geom_jitter()
+```
+
+```{r}
+NHANES %>% 
+  ggplot(aes(x=HealthGen,y=DaysPhysHlthBad,color=Race1))+
+  geom_jitter()
+```
+
+
+## At least 2 models. Explain why you chose to fit these models and interpret the coefficients of the model. What do they mean in the context of your research question? 
+```{r}
+lm_health <- lm(DaysPhysHlthBad~Age+Diabetes, data=NHANES)
+
+tidy(lm_health)
+```
+```{r}
+lm_Blood <- lm(DaysPhysHlthBad~BPSysAve+Diabetes, data=NHANES)
+
+tidy(lm_Blood)
+```
+```{r}
+lm_race <- lm(BPSysAve~Race3*Poverty, data = NHANES)
+
+tidy(lm_race)
+```
+```{r}
+NHANES %>% 
+  ggplot(aes(x=Diabetes,y=Poverty,color=Race3))+
+  geom_boxplot()
+```
+
+## Make some inferences, using either hypothesis testing or confidence intervals. What did you learn?
+
+## Discuss next steps. 
