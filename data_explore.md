@@ -1,5 +1,5 @@
 ---
-title: "Group check in 2"
+title: "Final Project"
 authors: "Daniel Beidelschies, Kai Akimoto, Tim Minot"
 output: 
   html_document:
@@ -11,11 +11,11 @@ output:
 
 The draft should include the following:
 
-## Describe the data and your research question. Where does it come from? How was it collected? What do you hope to learn?
+## Research Question 
 
 + For our project we will be utilizing the NHANES data set as well as the health_coverage data set. The NHANES data set contains verious health related information that help to shed light on the quality of life that an individual has. We aim to use this data to investigate how certain socioeconomic factors play role in quality of health.
 
-## 2-4 graphs with explanations about what the graphs show. 
+## Graphs 
 
 ![](data_explore_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
@@ -25,7 +25,10 @@ The draft should include the following:
 
 + This shows how people of different races are affected by diabetes based on their level of poverty. The lower the y value, the more poverty that the race has on average. 
 
-## At least 2 models. Explain why you chose to fit these models and interpret the coefficients of the model. What do they mean in the context of your research question? 
+![](data_explore_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](data_explore_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](data_explore_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+## Models
 
 ```
 ## # A tibble: 7 x 5
@@ -44,7 +47,7 @@ The draft should include the following:
 
 + The intercept represents Asian individuals at the age of 0. The Age coefficient represents the average unit of increase for bloodpressure as individuals get older. As you can see, there is an extremely high p-value, supporting the strong relationship between age and bloodpressure increase. 
 
-+ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood pRessure Increase for these indviduals is not likley to be due to their race. 
++ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood Pressure Increase for these indviduals is not likley to be due to their race. 
 
 + Race3Black coefficient represents the avaerage unit of increase for blood pressure of inidividuals that are Black. As you can see that black individuals have a significantly higher increase of blood pressure, "+5.51", than other races. Furthermore, the p-value of this coefficient is significantly lower, outlining a very strong relationship between an indidual being black and their systolic blood pressure increase. 
 
@@ -65,7 +68,80 @@ The draft should include the following:
 + The Age:Poverty coefficient is the average unit of change of Systolic blood pressure for aging individuals depending on their poverty level. Since the estimate is negative, we can determine that as individuals get older, the less poverty stricken they are (i.e. 5), the more their blood pressure will decrease.
 
 
-## Make some inferences, using either hypothesis testing or confidence intervals. What did you learn?
+
+```
+## # A tibble: 2 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)     122.       0.284     428.  0.      
+## 2 PhysActiveYes    -4.17     0.380     -11.0 7.58e-28
+```
+
+
+```
+## # A tibble: 3 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)   121.         0.421   288.    0.      
+## 2 PhysActiveYes  -4.18       0.398   -10.5   1.33e-25
+## 3 Poverty         0.0626     0.118     0.529 5.97e- 1
+```
+
+
+```
+## # A tibble: 7 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)    120.        1.15    104.    0.      
+## 2 PhysActiveYes   -5.00      0.540    -9.25  3.50e-20
+## 3 Race3Black       5.53      1.36      4.06  4.95e- 5
+## 4 Race3Hispanic    0.693     1.53      0.453 6.50e- 1
+## 5 Race3Mexican    -1.23      1.44     -0.858 3.91e- 1
+## 6 Race3White       3.77      1.15      3.27  1.09e- 3
+## 7 Race3Other       3.96      1.96      2.02  4.35e- 2
+```
+
+
+
+
+
+
+
+```
+## # A tibble: 7 x 5
+##   term          estimate std.error statistic   p.value
+##   <chr>            <dbl>     <dbl>     <dbl>     <dbl>
+## 1 (Intercept)     3.09      0.102     30.3   1.01e-183
+## 2 Race3Black     -1.03      0.124     -8.32  1.14e- 16
+## 3 Race3Hispanic  -1.11      0.136     -8.17  4.11e- 16
+## 4 Race3Mexican   -1.30      0.129    -10.1   8.29e- 24
+## 5 Race3White      0.0486    0.106      0.458 6.47e-  1
+## 6 Race3Other     -0.708     0.168     -4.22  2.47e-  5
+## 7 DiabetesYes    -0.217     0.0894    -2.43  1.53e-  2
+```
++ Intercept is for Asians without diabetes. Indivieuals with diabetes in general have an average increase impoverishment (negative estimate) When you factor in race, Black, Hispanics, Mexicans all have an increase in impoverishment (negative estimate), while Whites tend to have a decrease in impoverishment. 
+
+```
+## # A tibble: 3 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)     120.       0.294    411.   0.      
+## 2 DiabetesYes       8.89     0.648     13.7  2.37e-42
+## 3 PhysActiveYes    -3.56     0.378     -9.41 6.66e-21
+```
+
+
+```
+## # A tibble: 4 x 5
+##   term                       estimate std.error statistic  p.value
+##   <chr>                         <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)               120.          0.301 400.      0.      
+## 2 DiabetesYes                 8.89        0.835  10.6     2.82e-26
+## 3 PhysActiveYes              -3.55        0.396  -8.97    3.57e-19
+## 4 DiabetesYes:PhysActiveYes  -0.00528     1.32   -0.00399 9.97e- 1
+```
+
+## Inferences
 
 + The number below represents the confidence interval for the intercept of BPSysAve when Age and Poverty are fully interacting.
 
@@ -73,10 +149,36 @@ The draft should include the following:
 ## [1] 0.5653686
 ```
 
+```
+## # A tibble: 1 x 1
+##      SE
+##   <dbl>
+## 1 0.565
+```
+
+```
+## # A tibble: 1 x 2
+##   lower upper
+##   <dbl> <dbl>
+## 1  98.0  100.
+```
+
+```
+## [1]  97.97801 100.23949
+```
 + Based on the analysis, our hypothesis is that Age affects health quality. We infer that socioeconomic factors (specifically race, poverty, *Physical Activity)  affect health qualtity. Based on our preliminary investigation, we can infer that the health of certain races are more impacted by poverty than others. 
 
-## Discuss next steps. 
 
-+ Our next step would be to look at how physical activity and poverty are related to see if certain lifestyle that promote better health are associated with higher economic status (poverty). 
 
-+ We are also interested in looking at lifestyle practices such as sleep, substance usage, and physical activity play a role in the quality of health of individuals of different economic categories and races.
+```
+## # A tibble: 7 x 2
+##   Race3        n
+##   <fct>    <int>
+## 1 Asian      288
+## 2 Black      589
+## 3 Hispanic   350
+## 4 Mexican    480
+## 5 White     3135
+## 6 Other      158
+## 7 <NA>      5000
+```

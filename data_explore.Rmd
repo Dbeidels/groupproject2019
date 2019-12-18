@@ -1,5 +1,5 @@
 ---
-title: "Group check in 2"
+title: "Final Project"
 authors: "Daniel Beidelschies, Kai Akimoto, Tim Minot"
 output: 
   html_document:
@@ -18,11 +18,11 @@ view(NHANES)
 
 The draft should include the following:
 
-## Describe the data and your research question. Where does it come from? How was it collected? What do you hope to learn?
+## Research Question 
 
 + For our project we will be utilizing the NHANES data set as well as the health_coverage data set. The NHANES data set contains verious health related information that help to shed light on the quality of life that an individual has. We aim to use this data to investigate how certain socioeconomic factors play role in quality of health.
 
-## 2-4 graphs with explanations about what the graphs show. 
+## Graphs 
 
 ```{r, echo=FALSE,warning=FALSE}
 NHANES %>% 
@@ -40,7 +40,22 @@ NHANES %>%
 
 + This shows how people of different races are affected by diabetes based on their level of poverty. The lower the y value, the more poverty that the race has on average. 
 
-## At least 2 models. Explain why you chose to fit these models and interpret the coefficients of the model. What do they mean in the context of your research question? 
+```{r,echo=FALSE,warning=FALSE}
+NHANES %>% 
+  ggplot(aes(x=Poverty,y=BPSysAve, color=PhysActive))+
+  geom_jitter()
+```
+```{r,echo=FALSE,warning=FALSE}
+NHANES %>% 
+  ggplot(aes(x=Race3, y=BPSysAve,color=Smoke100))+
+  geom_boxplot()
+```
+```{r,echo=FALSE,warning=FALSE}
+NHANES %>% 
+  ggplot(aes(x=Race3,y=Poverty,color=Diabetes))+
+  geom_boxplot()
+```
+## Models
 ```{r,echo=FALSE}
 lm_health <- lm(BPSysAve~Age+Race3, data=NHANES)
 
@@ -51,7 +66,7 @@ tidy(lm_health)
 
 + The intercept represents Asian individuals at the age of 0. The Age coefficient represents the average unit of increase for bloodpressure as individuals get older. As you can see, there is an extremely high p-value, supporting the strong relationship between age and bloodpressure increase. 
 
-+ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood pRessure Increase for these indviduals is not likley to be due to their race. 
++ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood Pressure Increase for these indviduals is not likley to be due to their race. 
 
 + Race3Black coefficient represents the avaerage unit of increase for blood pressure of inidividuals that are Black. As you can see that black individuals have a significantly higher increase of blood pressure, "+5.51", than other races. Furthermore, the p-value of this coefficient is significantly lower, outlining a very strong relationship between an indidual being black and their systolic blood pressure increase. 
 
@@ -67,7 +82,48 @@ tidy(lm_Poverty)
 + The Age:Poverty coefficient is the average unit of change of Systolic blood pressure for aging individuals depending on their poverty level. Since the estimate is negative, we can determine that as individuals get older, the less poverty stricken they are (i.e. 5), the more their blood pressure will decrease.
 
 
-## Make some inferences, using either hypothesis testing or confidence intervals. What did you learn?
+```{r,echo=FALSE}
+lm.phycical <-lm(BPSysAve~PhysActive,data=NHANES)
+
+tidy(lm.phycical)
+```
+
+```{r,echo=FALSE}
+lm.pov.act <- lm(BPSysAve~PhysActive+Poverty,data = NHANES)
+
+tidy(lm.pov.act)
+```
+
+```{r,echo=FALSE}
+lm.race.act <- lm(BPSysAve~PhysActive+Race3,data = NHANES)
+
+tidy(lm.race.act)
+```
+
+
+
+
+
+
+```{r,echo=FALSE}
+lm.race.pov  <- lm(Poverty~Race3+Diabetes,data=NHANES)
+
+tidy(lm.race.pov)
+```
++ Intercept is for Asians without diabetes. Indivieuals with diabetes in general have an average increase impoverishment (negative estimate) When you factor in race, Black, Hispanics, Mexicans all have an increase in impoverishment (negative estimate), while Whites tend to have a decrease in impoverishment. 
+```{r,echo=FALSE}
+lm.diabetes <- lm(BPSysAve~Diabetes+PhysActive,data=NHANES)
+
+tidy(lm.diabetes)
+```
+
+```{r,echo=FALSE}
+lm.diabetes.active <- lm(BPSysAve~Diabetes*PhysActive,data=NHANES)
+
+tidy(lm.diabetes.active)
+```
+
+## Inferences
 ```{r,echo=FALSE}
 set.seed(1129) 
 
@@ -85,12 +141,27 @@ bootstrap_BP <-
 ```{r, echo=FALSE}
 SE <- sd(bootstrap_BP  %>% pull(estimate))
 SE
+bootstrap_BP %>% 
+  ungroup() %>% 
+  summarize(SE = sd(estimate))
 ```
+```{r,echo=FALSE}
+estimated_coeff <- tidy(lm_Poverty) %>% 
+  filter(term == "(Intercept)") %>% 
+  pull(estimate)
 
+bootstrap_BP %>% 
+  select(replicate, estimate) %>% 
+  ungroup() %>% 
+  summarize(lower = estimated_coeff - 2*sd(estimate),
+            upper = estimated_coeff + 2*sd(estimate))
+
+c(estimated_coeff - 2*SE, estimated_coeff + 2*SE)
+```
 + Based on the analysis, our hypothesis is that Age affects health quality. We infer that socioeconomic factors (specifically race, poverty, *Physical Activity)  affect health qualtity. Based on our preliminary investigation, we can infer that the health of certain races are more impacted by poverty than others. 
 
-## Discuss next steps. 
 
-+ Our next step would be to look at how physical activity and poverty are related to see if certain lifestyle that promote better health are associated with higher economic status (poverty). 
-
-+ We are also interested in looking at lifestyle practices such as sleep, substance usage, and physical activity play a role in the quality of health of individuals of different economic categories and races.
+```{r,echo=FALSE,warning=FALSE}
+NHANES %>% 
+  count(Race3) 
+```
