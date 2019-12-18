@@ -165,3 +165,6 @@ c(estimated_coeff - 2*SE, estimated_coeff + 2*SE)
 NHANES %>% 
   count(Race3) 
 ```
+
+
+
