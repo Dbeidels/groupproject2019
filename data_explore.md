@@ -15,59 +15,79 @@ The draft should include the following:
 
 + For our project we will be utilizing the NHANES data set as well as the health_coverage data set. The NHANES data set contains verious health related information that help to shed light on the quality of life that an individual has. We aim to use this data to investigate how certain socioeconomic factors play role in quality of health.
 
-## Graphs 
+## Data 
 
+### NHANES
+
++ BPSysAve 
++ Poverty 
++ Race3 
++ PhysActivity 
++ Smoke 100 
++ Diabetes
+
+### Graphs 
+
+
+### Blood Pressure according to Race
 ![](data_explore_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-+ This graph shows the relationship between Systolic Blood pressure of older individuals with Diabetes. As you can see, as individuals get older, they are more likely to have incidence of diabetes as well as a higher blood pressure.
++ Shows average systolic blood pressure based on Race
 
+### Change in average poverty levels accross different races based on incidence of Diabetes
 ![](data_explore_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-+ This shows how people of different races are affected by diabetes based on their level of poverty. The lower the y value, the more poverty that the race has on average. 
++ This shows the relationship between poverty and diabetes for different races
 
+
+### Change in poverty based on Race as it is affected by Diabetes
 ![](data_explore_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
++ Relationship between poverty and diabetes for different races
+
+### Relationship between Blood Pressure and Poverty and Physical Activity
 ![](data_explore_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+
+
+
+### How smoking affects blood pressure in different Races
+
+```
+## Warning: Removed 1449 rows containing non-finite values (stat_boxplot).
+```
+
 ![](data_explore_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
++ All races are affected fairly the same, except for Mexicans
+
 ## Models
++ lm_health
 
 ```
-## # A tibble: 7 x 5
-##   term          estimate std.error statistic   p.value
-##   <chr>            <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     98.0      1.04       93.9  0.       
-## 2 Age              0.457    0.0112     40.7  6.66e-306
-## 3 Race3Black       5.51     1.16        4.77 1.94e-  6
-## 4 Race3Hispanic    1.55     1.30        1.20 2.32e-  1
-## 5 Race3Mexican     1.72     1.21        1.42 1.56e-  1
-## 6 Race3White       1.46     0.985       1.48 1.40e-  1
-## 7 Race3Other       4.07     1.63        2.49 1.27e-  2
+## # A tibble: 6 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)    116.         1.11   104.    0       
+## 2 Race3Black       4.94       1.36     3.63  0.000286
+## 3 Race3Hispanic    0.549      1.53     0.359 0.719   
+## 4 Race3Mexican    -2.05       1.42    -1.45  0.148   
+## 5 Race3White       3.24       1.16     2.80  0.00517 
+## 6 Race3Other       1.82       1.92     0.949 0.343
 ```
++ significant relationship between only some races and health
 
-+ This partial interaction model helps to show how Race and Age interact to affect Systolic Blood Pressure because it helps to shed light on how certain races are more likely to experience an increase in blood pressure (which associated with poorer health). 
-
-+ The intercept represents Asian individuals at the age of 0. The Age coefficient represents the average unit of increase for bloodpressure as individuals get older. As you can see, there is an extremely high p-value, supporting the strong relationship between age and bloodpressure increase. 
-
-+ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood Pressure Increase for these indviduals is not likley to be due to their race. 
-
-+ Race3Black coefficient represents the avaerage unit of increase for blood pressure of inidividuals that are Black. As you can see that black individuals have a significantly higher increase of blood pressure, "+5.51", than other races. Furthermore, the p-value of this coefficient is significantly lower, outlining a very strong relationship between an indidual being black and their systolic blood pressure increase. 
-
+### lm_Poverty
 
 ```
-## # A tibble: 4 x 5
-##   term        estimate std.error statistic   p.value
-##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)  99.1      0.690      144.   0.       
-## 2 Age           0.524    0.0161      32.5  6.01e-218
-## 3 Poverty       0.354    0.225        1.57 1.16e-  1
-## 4 Age:Poverty  -0.0283   0.00503     -5.62 1.97e-  8
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Intercept) 118.         0.383   308.      0    
+## 2 Poverty       0.0183     0.115     0.159   0.874
 ```
-+ This full interaction model shows how both Age and Poverty interact with each other to affect systolic blood pressure. The data shows how people of higher economic status will have a lower blood pressure on average than those of a lower economic status. 
-+ Intercept coefficient represents the average systolic blood pressure when both the age and poverty level is 0.
-+ As we've established in previous models and graphs, Age and systolic blood pressure increase are very strongly related. As the p value for the age coefficient is quite miniscule showing a strong relationship
-+ The poverty coefficient is the average unit increase depending on the categorical numerical value of poverty. In this integer-based numerical category, 1 is indicative of most poverty stricken and 5 is least poverty stricken. 
-+ The Age:Poverty coefficient is the average unit of change of Systolic blood pressure for aging individuals depending on their poverty level. Since the estimate is negative, we can determine that as individuals get older, the less poverty stricken they are (i.e. 5), the more their blood pressure will decrease.
++ poverty is not related with health
 
-
+### lm.physical
 
 ```
 ## # A tibble: 2 x 5
@@ -77,6 +97,7 @@ The draft should include the following:
 ## 2 PhysActiveYes    -4.17     0.380     -11.0 7.58e-28
 ```
 
+### lm.pov.act
 
 ```
 ## # A tibble: 3 x 5
@@ -87,25 +108,29 @@ The draft should include the following:
 ## 3 Poverty         0.0626     0.118     0.529 5.97e- 1
 ```
 
+### lm.race.act
 
 ```
-## # A tibble: 7 x 5
-##   term          estimate std.error statistic  p.value
-##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)    120.        1.15    104.    0.      
-## 2 PhysActiveYes   -5.00      0.540    -9.25  3.50e-20
-## 3 Race3Black       5.53      1.36      4.06  4.95e- 5
-## 4 Race3Hispanic    0.693     1.53      0.453 6.50e- 1
-## 5 Race3Mexican    -1.23      1.44     -0.858 3.91e- 1
-## 6 Race3White       3.77      1.15      3.27  1.09e- 3
-## 7 Race3Other       3.96      1.96      2.02  4.35e- 2
+## # A tibble: 12 x 5
+##    term                        estimate std.error statistic p.value
+##    <chr>                          <dbl>     <dbl>     <dbl>   <dbl>
+##  1 (Intercept)                 120.          1.77   67.9    0      
+##  2 PhysActiveYes                -5.40        2.26   -2.39   0.0170 
+##  3 Race3Black                    4.23        2.10    2.02   0.0437 
+##  4 Race3Hispanic                -0.0568      2.29   -0.0247 0.980  
+##  5 Race3Mexican                 -2.41        2.18   -1.11   0.269  
+##  6 Race3White                    4.18        1.84    2.27   0.0230 
+##  7 Race3Other                   -2.44        3.14   -0.776  0.438  
+##  8 PhysActiveYes:Race3Black      2.47        2.76    0.893  0.372  
+##  9 PhysActiveYes:Race3Hispanic   1.45        3.09    0.469  0.639  
+## 10 PhysActiveYes:Race3Mexican    2.32        2.91    0.797  0.426  
+## 11 PhysActiveYes:Race3White     -0.703       2.36   -0.298  0.766  
+## 12 PhysActiveYes:Race3Other     10.5         4.02    2.61   0.00920
 ```
 
 
 
-
-
-
+### lm.race.pov1
 
 ```
 ## # A tibble: 7 x 5
@@ -119,7 +144,28 @@ The draft should include the following:
 ## 6 Race3Other     -0.708     0.168     -4.22  2.47e-  5
 ## 7 DiabetesYes    -0.217     0.0894    -2.43  1.53e-  2
 ```
-+ Intercept is for Asians without diabetes. Indivieuals with diabetes in general have an average increase impoverishment (negative estimate) When you factor in race, Black, Hispanics, Mexicans all have an increase in impoverishment (negative estimate), while Whites tend to have a decrease in impoverishment. 
+
+### lm.race.pov2
+
+```
+## # A tibble: 12 x 5
+##    term                      estimate std.error statistic   p.value
+##    <chr>                        <dbl>     <dbl>     <dbl>     <dbl>
+##  1 (Intercept)                 3.12       0.106    29.3   1.98e-173
+##  2 Race3Black                 -1.09       0.130    -8.37  7.28e- 17
+##  3 Race3Hispanic              -1.13       0.141    -7.99  1.76e- 15
+##  4 Race3Mexican               -1.34       0.134   -10.0   2.44e- 23
+##  5 Race3White                  0.0281     0.111     0.254 8.00e-  1
+##  6 Race3Other                 -0.831      0.175    -4.75  2.05e-  6
+##  7 DiabetesYes                -0.551      0.366    -1.50  1.32e-  1
+##  8 Race3Black:DiabetesYes      0.603      0.430     1.40  1.61e-  1
+##  9 Race3Hispanic:DiabetesYes   0.225      0.505     0.445 6.56e-  1
+## 10 Race3Mexican:DiabetesYes    0.480      0.489     0.980 3.27e-  1
+## 11 Race3White:DiabetesYes      0.227      0.383     0.591 5.54e-  1
+## 12 Race3Other:DiabetesYes      1.58       0.622     2.53  1.13e-  2
+```
+
+### lm.diabetes
 
 ```
 ## # A tibble: 3 x 5
@@ -130,6 +176,7 @@ The draft should include the following:
 ## 3 PhysActiveYes    -3.56     0.378     -9.41 6.66e-21
 ```
 
+### lm.diabetes.active
 
 ```
 ## # A tibble: 4 x 5
@@ -141,7 +188,41 @@ The draft should include the following:
 ## 4 DiabetesYes:PhysActiveYes  -0.00528     1.32   -0.00399 9.97e- 1
 ```
 
+
+
+
+
+
+
+
+
 ## Inferences
+
+
++ H0 = 0 There is no relationship between race and blood pressure
++ HA ≠ 0 There is a relationship between race and blood pressure
+
+### lm.race.pov.bp
+
+```
+## # A tibble: 12 x 5
+##    term                  estimate std.error statistic p.value
+##    <chr>                    <dbl>     <dbl>     <dbl>   <dbl>
+##  1 (Intercept)           118.         2.41    48.8     0     
+##  2 Race3Black             -0.290      2.78    -0.104   0.917 
+##  3 Race3Hispanic          -1.12       3.01    -0.371   0.710 
+##  4 Race3Mexican           -4.76       2.86    -1.67    0.0954
+##  5 Race3White              3.48       2.52     1.38    0.167 
+##  6 Race3Other              3.41       3.80     0.899   0.369 
+##  7 Poverty                -0.527      0.681   -0.774   0.439 
+##  8 Race3Black:Poverty      1.95       0.850    2.29    0.0219
+##  9 Race3Hispanic:Poverty   0.638      0.989    0.645   0.519 
+## 10 Race3Mexican:Poverty    1.06       0.936    1.14    0.256 
+## 11 Race3White:Poverty     -0.0505     0.710   -0.0711  0.943 
+## 12 Race3Other:Poverty     -1.04       1.19    -0.873   0.383
+```
++ Relationship between only some races and blood pressure, there is only a relationship the interactions of black individuals and poverty on blood pressure
+
 
 + The number below represents the confidence interval for the intercept of BPSysAve when Age and Poverty are fully interacting.
 
@@ -160,13 +241,32 @@ The draft should include the following:
 ## # A tibble: 1 x 2
 ##   lower upper
 ##   <dbl> <dbl>
-## 1  98.0  100.
+## 1  117.  119.
 ```
 
 ```
-## [1]  97.97801 100.23949
+## [1] 116.9043 119.1658
 ```
-+ Based on the analysis, our hypothesis is that Age affects health quality. We infer that socioeconomic factors (specifically race, poverty, *Physical Activity)  affect health qualtity. Based on our preliminary investigation, we can infer that the health of certain races are more impacted by poverty than others. 
+
+
+```r
+lm.bp.race<- lm(BPSysAve~Race3,data=NHANES)
+
+tidy(lm.bp.race)
+```
+
+```
+## # A tibble: 6 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)    116.         1.11   104.    0       
+## 2 Race3Black       4.94       1.36     3.63  0.000286
+## 3 Race3Hispanic    0.549      1.53     0.359 0.719   
+## 4 Race3Mexican    -2.05       1.42    -1.45  0.148   
+## 5 Race3White       3.24       1.16     2.80  0.00517 
+## 6 Race3Other       1.82       1.92     0.949 0.343
+```
+
 
 
 

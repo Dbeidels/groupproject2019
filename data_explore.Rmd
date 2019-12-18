@@ -22,108 +22,156 @@ The draft should include the following:
 
 + For our project we will be utilizing the NHANES data set as well as the health_coverage data set. The NHANES data set contains verious health related information that help to shed light on the quality of life that an individual has. We aim to use this data to investigate how certain socioeconomic factors play role in quality of health.
 
-## Graphs 
+## Data 
 
+### NHANES
+
++ BPSysAve 
++ Poverty 
++ Race3 
++ PhysActivity 
++ Smoke 100 
++ Diabetes
+
+### Graphs 
+
+
+### Blood Pressure according to Race
 ```{r, echo=FALSE,warning=FALSE}
 NHANES %>% 
-  ggplot(aes(x=Age,y=BPSysAve, color=Diabetes))+
-  geom_jitter()
+  ggplot(aes(x=Race3,y=BPSysAve))+
+  geom_boxplot()
 ```
 
-+ This graph shows the relationship between Systolic Blood pressure of older individuals with Diabetes. As you can see, as individuals get older, they are more likely to have incidence of diabetes as well as a higher blood pressure.
++ Shows average systolic blood pressure based on Race
 
+### Change in average poverty levels accross different races based on incidence of Diabetes
 ```{r,echo=FALSE,warning=FALSE}
 NHANES %>% 
   ggplot(aes(x=Diabetes,y=Poverty,color=Race3))+
   geom_boxplot()
 ```
 
-+ This shows how people of different races are affected by diabetes based on their level of poverty. The lower the y value, the more poverty that the race has on average. 
++ This shows the relationship between poverty and diabetes for different races
 
-```{r,echo=FALSE,warning=FALSE}
-NHANES %>% 
-  ggplot(aes(x=Poverty,y=BPSysAve, color=PhysActive))+
-  geom_jitter()
-```
-```{r,echo=FALSE,warning=FALSE}
-NHANES %>% 
-  ggplot(aes(x=Race3, y=BPSysAve,color=Smoke100))+
-  geom_boxplot()
-```
+
+### Change in poverty based on Race as it is affected by Diabetes
 ```{r,echo=FALSE,warning=FALSE}
 NHANES %>% 
   ggplot(aes(x=Race3,y=Poverty,color=Diabetes))+
   geom_boxplot()
 ```
-## Models
-```{r,echo=FALSE}
-lm_health <- lm(BPSysAve~Age+Race3, data=NHANES)
 
-tidy(lm_health)
++ Relationship between poverty and diabetes for different races
+
+### Relationship between Blood Pressure and Poverty and Physical Activity
+```{r,echo=FALSE,warning=FALSE}
+NHANES %>% 
+  ggplot(aes(x=Poverty,y=BPSysAve, color=PhysActive))+
+  geom_jitter()
 ```
 
-+ This partial interaction model helps to show how Race and Age interact to affect Systolic Blood Pressure because it helps to shed light on how certain races are more likely to experience an increase in blood pressure (which associated with poorer health). 
 
-+ The intercept represents Asian individuals at the age of 0. The Age coefficient represents the average unit of increase for bloodpressure as individuals get older. As you can see, there is an extremely high p-value, supporting the strong relationship between age and bloodpressure increase. 
 
-+ Race3Hispanic, Race3Mexican, Race3White, coefficients represent the increase of blood pressure for individuals that are Hispanic, Mexican, or White respectively. These coefficients are not dependent on Age and these estimates are purely the average unit of increase for these races. As you can see, the p-value for individuals of these races are very high, meaning that there the liklihood of the Blood Pressure Increase for these indviduals is not likley to be due to their race. 
 
-+ Race3Black coefficient represents the avaerage unit of increase for blood pressure of inidividuals that are Black. As you can see that black individuals have a significantly higher increase of blood pressure, "+5.51", than other races. Furthermore, the p-value of this coefficient is significantly lower, outlining a very strong relationship between an indidual being black and their systolic blood pressure increase. 
-
+### How smoking affects blood pressure in different Races
 ```{r,echo=FALSE}
-lm_Poverty <- lm(BPSysAve~Age*Poverty, data=NHANES)
+NHANES %>% 
+  ggplot(aes(x=Race3, y=BPSysAve,color=Smoke100))+
+  geom_boxplot()
+```
++ All races are affected fairly the same, except for Mexicans
+
+## Models
++ lm_health
+```{r,echo=FALSE}
+lm_race <- lm(BPSysAve~Race3, data=NHANES)
+
+tidy(lm_race)
+```
++ significant relationship between only some races and health
+
+### lm_Poverty
+```{r,echo=FALSE}
+lm_Poverty <- lm(BPSysAve~Poverty, data=NHANES)
 
 tidy(lm_Poverty)
 ```
-+ This full interaction model shows how both Age and Poverty interact with each other to affect systolic blood pressure. The data shows how people of higher economic status will have a lower blood pressure on average than those of a lower economic status. 
-+ Intercept coefficient represents the average systolic blood pressure when both the age and poverty level is 0.
-+ As we've established in previous models and graphs, Age and systolic blood pressure increase are very strongly related. As the p value for the age coefficient is quite miniscule showing a strong relationship
-+ The poverty coefficient is the average unit increase depending on the categorical numerical value of poverty. In this integer-based numerical category, 1 is indicative of most poverty stricken and 5 is least poverty stricken. 
-+ The Age:Poverty coefficient is the average unit of change of Systolic blood pressure for aging individuals depending on their poverty level. Since the estimate is negative, we can determine that as individuals get older, the less poverty stricken they are (i.e. 5), the more their blood pressure will decrease.
++ poverty is not related with health
 
-
+### lm.physical
 ```{r,echo=FALSE}
 lm.phycical <-lm(BPSysAve~PhysActive,data=NHANES)
 
 tidy(lm.phycical)
 ```
 
+### lm.pov.act
 ```{r,echo=FALSE}
 lm.pov.act <- lm(BPSysAve~PhysActive+Poverty,data = NHANES)
 
 tidy(lm.pov.act)
 ```
 
+### lm.race.act
 ```{r,echo=FALSE}
-lm.race.act <- lm(BPSysAve~PhysActive+Race3,data = NHANES)
+lm.race.act <- lm(BPSysAve~PhysActive*Race3,data = NHANES)
 
 tidy(lm.race.act)
 ```
 
 
 
-
-
-
+### lm.race.pov1
 ```{r,echo=FALSE}
-lm.race.pov  <- lm(Poverty~Race3+Diabetes,data=NHANES)
+lm.race.pov1  <- lm(Poverty~Race3+Diabetes,data=NHANES)
 
-tidy(lm.race.pov)
+tidy(lm.race.pov1)
 ```
-+ Intercept is for Asians without diabetes. Indivieuals with diabetes in general have an average increase impoverishment (negative estimate) When you factor in race, Black, Hispanics, Mexicans all have an increase in impoverishment (negative estimate), while Whites tend to have a decrease in impoverishment. 
+
+### lm.race.pov2
+```{r,echo=FALSE}
+lm.race.pov2  <- lm(Poverty~Race3*Diabetes,data=NHANES)
+
+tidy(lm.race.pov2)
+```
+
+### lm.diabetes
 ```{r,echo=FALSE}
 lm.diabetes <- lm(BPSysAve~Diabetes+PhysActive,data=NHANES)
 
 tidy(lm.diabetes)
 ```
 
+### lm.diabetes.active
 ```{r,echo=FALSE}
 lm.diabetes.active <- lm(BPSysAve~Diabetes*PhysActive,data=NHANES)
 
 tidy(lm.diabetes.active)
 ```
 
+
+
+
+
+
+
+
+
 ## Inferences
+
+
++ H0 = 0 There is no relationship between race and blood pressure
++ HA ≠ 0 There is a relationship between race and blood pressure
+
+### lm.race.pov.bp
+```{r,echo=FALSE}
+lm.race.pov.bp <- lm(BPSysAve~Race3*Poverty,data=NHANES)
+tidy(lm.race.pov.bp)
+
+```
++ Relationship between only some races and blood pressure, there is only a relationship the interactions of black individuals and poverty on blood pressure
+
 ```{r,echo=FALSE}
 set.seed(1129) 
 
@@ -158,7 +206,14 @@ bootstrap_BP %>%
 
 c(estimated_coeff - 2*SE, estimated_coeff + 2*SE)
 ```
-+ Based on the analysis, our hypothesis is that Age affects health quality. We infer that socioeconomic factors (specifically race, poverty, *Physical Activity)  affect health qualtity. Based on our preliminary investigation, we can infer that the health of certain races are more impacted by poverty than others. 
+
+```{r}
+
+lm.bp.race<- lm(BPSysAve~Race3,data=NHANES)
+
+tidy(lm.bp.race)
+```
+
 
 
 ```{r,echo=FALSE,warning=FALSE}
